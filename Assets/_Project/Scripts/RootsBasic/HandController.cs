@@ -10,10 +10,13 @@ public class HandController : MonoBehaviour
 
     public GameObject openHand;
     public GameObject closedHand;
-    public GameObject closedHandWithRoot;
+    public GameObject withRoot;
 
     public RaycastHit hitInfo;
+    public LayerMask pointerLayer;
     public LayerMask rootsLayer;
+
+    public List<IRoot> pickedRoots;
 
     private void Start()
     {
@@ -23,6 +26,7 @@ public class HandController : MonoBehaviour
         {
             targetCamera = Camera.main;
         }
+        pickedRoots = new List<IRoot>();
     }
 
     void Update()
@@ -37,7 +41,7 @@ public class HandController : MonoBehaviour
     {
         Ray inputRay = targetCamera.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(inputRay, out hitInfo))
+        if (Physics.Raycast(inputRay, out hitInfo, Mathf.Infinity, pointerLayer))
         {
             Vector3 contactPoint = hitInfo.point;
             handVis.position = contactPoint + (-handDistance * inputRay.direction);
@@ -46,8 +50,24 @@ public class HandController : MonoBehaviour
 
     private void MouseInput(bool mousePress)
     {
+        if (!mousePress)
+        {
+            foreach (var root in pickedRoots)
+            {
+                root.onRelease();
+            }
+
+            pickedRoots = new List<IRoot>();
+        }
+
         openHand.SetActive(!mousePress);
         closedHand.SetActive(mousePress);
+
+        if (pickedRoots.Count > 0)
+        {
+            withRoot.SetActive(mousePress);
+        }
+        else withRoot.SetActive(false);
     }
 
     private void Grab()
@@ -55,7 +75,23 @@ public class HandController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Collider[] hits = Physics.OverlapSphere(hitInfo.point, 1, rootsLayer);
-
+            pickedRoots = FilterRoots(hits);
         }
+    }
+
+    private List<IRoot> FilterRoots(Component[] colliders)
+    {
+        List<IRoot> foundRoots = new List<IRoot>();
+        foreach (var collider in colliders)
+        {
+            if (collider.TryGetComponent(out IRoot root))
+            {
+                foundRoots.Add(root);
+                root.onGrab(handVis);
+                Debug.Log("Hit");
+            }
+        }
+
+        return foundRoots;
     }
 }
