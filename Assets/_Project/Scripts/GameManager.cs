@@ -16,12 +16,15 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenu;
     public bool gameIsPaused;
 
+    [Header("Game System")]
+    public long points;
     
     
     
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 60;
         if (_instance != null && _instance != this) Destroy(this);
         else _instance = this;
     }
@@ -87,5 +90,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+}
+public struct PlayerInfo {
+    string name;
+    float durationRun;
+    long pointsRun;
+    
 }
 
