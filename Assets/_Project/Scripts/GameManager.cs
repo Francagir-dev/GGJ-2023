@@ -92,9 +92,11 @@ public class GameManager : MonoBehaviour
 
 }
 public struct PlayerInfo {
+
     string name;
     float durationRun;
     long pointsRun;
     
+
 }
 
