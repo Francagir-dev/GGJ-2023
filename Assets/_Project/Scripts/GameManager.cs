@@ -5,52 +5,71 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    
-    public static GameManager _instance;
 
+    public static GameManager _instance;
 
     [Header("Timer")]
     public float gameTimer = 0.0f;
-    [SerializeField] private TextMeshProUGUI timerText;
-
+    [SerializeField] private TextMeshProUGUI timerText; 
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
     public bool gameIsPaused;
 
+    [Header("Game System")]
+    public long points;
+    
+    
+    
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 60;
         if (_instance != null && _instance != this) Destroy(this);
         else _instance = this;
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)) PauseMenu();
+        if (Input.GetKeyDown(KeyCode.Escape)) PauseMenu();
+
+
     }
     private void FixedUpdate()
     {
-       
-        gameTimer += Time.deltaTime;
-       
-        timerText.text = gameTimer.ToString("F2");
-
-       // Timer(gameTimer);
+        Counter();
     }
-
-
 
     /// <summary>
     /// Timer sums time and change text
-    /// </summary>
-    /// <param name="timer">Game Timer</param>
-    void Timer(float timer)
+    /// </summary>   
+    void Counter()
     {
-        timer += Time.deltaTime;
-        timerText.text = timer.ToString();
+
+        int minutes = 0;
+        int seconds = 0;
+
+        string minutesString = "";
+        string secondsString = "";
+
+        gameTimer += Time.deltaTime; //Sum time
+
+        minutes = (int)(gameTimer / 60);
+        seconds = (int)(gameTimer % 60);
+
+
+
+        //Formatting Seconds
+        if (seconds < 10) secondsString = "0" + seconds.ToString();
+        else secondsString = seconds.ToString();
+
+        //Formatting Minutes
+        if (minutes > 9) minutesString = minutes.ToString();           
+        else  minutesString = "0" + minutes.ToString();
+            
+         //Setting text
+        timerText.text = minutesString + ":" + secondsString;
     }
     public void PauseMenu()
     {
@@ -58,18 +77,24 @@ public class GameManager : MonoBehaviour
 
         if (gameIsPaused)
         {
-            // pauseMenu.SetActive(true);
+            pauseMenu.SetActive(true);
             Debug.Log("GameIsPaused");
             Time.timeScale = 0f;
         }
         else
         {
-            // pauseMenu.SetActive(false);
+            pauseMenu.SetActive(false);
             Debug.Log("GameIsResumed");
             Time.timeScale = 1.0f;
         }
 
     }
 
+}
+public struct PlayerInfo {
+    string name;
+    float durationRun;
+    long pointsRun;
+    
 }
 
