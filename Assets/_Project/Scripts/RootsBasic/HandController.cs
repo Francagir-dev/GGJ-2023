@@ -16,6 +16,7 @@ public class HandController : MonoBehaviour
     public LayerMask pointerLayer;
     public LayerMask rootsLayer;
 
+    public Vector3 grabPoint;
     public List<IRoot> pickedRoots;
 
     private void Start()
@@ -44,7 +45,28 @@ public class HandController : MonoBehaviour
         if (Physics.Raycast(inputRay, out hitInfo, Mathf.Infinity, pointerLayer))
         {
             Vector3 contactPoint = hitInfo.point;
-            handVis.position = contactPoint + (-handDistance * inputRay.direction);
+            Vector3 targetPosition = contactPoint + (-handDistance * inputRay.direction);
+
+            if (pickedRoots.Count > 0)
+            {
+                //handVis.position = targetPosition;
+                float radius = 4; //radius of *black circle*
+                Vector3 centerPosition = grabPoint; //center of *black circle*
+                float distance = Vector3.Distance(targetPosition, centerPosition); //distance from ~green object~ to *black circle*
+                Debug.Log(distance);
+
+                if (distance > radius) //If the distance is less than the radius, it is already within the circle.
+                {
+                    Vector3 fromOriginToObject = targetPosition - centerPosition; //~GreenPosition~ - *BlackCenter*
+                    fromOriginToObject *= radius / distance; //Multiply by radius //Divide by Distance
+                    targetPosition = centerPosition + fromOriginToObject; //*BlackCenter* + all that Math
+                    handVis.position = targetPosition;
+                } else handVis.position = targetPosition;
+            }
+            else
+            {
+                handVis.position = targetPosition;
+            }
         }
     }
 
@@ -76,6 +98,11 @@ public class HandController : MonoBehaviour
         {
             Collider[] hits = Physics.OverlapSphere(hitInfo.point, 1, rootsLayer);
             pickedRoots = FilterRoots(hits);
+
+            if (pickedRoots.Count > 0)
+            {
+                grabPoint = hitInfo.point;
+            }
         }
     }
 
@@ -88,7 +115,6 @@ public class HandController : MonoBehaviour
             {
                 foundRoots.Add(root);
                 root.onGrab(handVis);
-                Debug.Log("Hit");
             }
         }
 
