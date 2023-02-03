@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
     
     public static GameManager _instance;
 
-
     [Header("Timer")]
     public float gameTimer = 0.0f;
     [SerializeField] private TextMeshProUGUI timerText;
@@ -20,37 +19,31 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
         if (_instance != null && _instance != this) Destroy(this);
         else _instance = this;
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)) PauseMenu();
+        if(Input.GetKeyDown(KeyCode.Escape)) PauseMenu();     
+
+
     }
     private void FixedUpdate()
-    {
-       
-        gameTimer += Time.deltaTime;
-       
-        timerText.text = gameTimer.ToString("F2");
-
-       // Timer(gameTimer);
+    {     
+       GameCounterTimer();
     }
-
-
 
     /// <summary>
     /// Timer sums time and change text
-    /// </summary>
-    /// <param name="timer">Game Timer</param>
-    void Timer(float timer)
+    /// </summary>   
+    void GameCounterTimer()
     {
-        timer += Time.deltaTime;
-        timerText.text = timer.ToString();
+        gameTimer += Time.deltaTime;
+        
+        timerText.text = gameTimer.ToString("F2");
     }
     public void PauseMenu()
     {
@@ -58,13 +51,13 @@ public class GameManager : MonoBehaviour
 
         if (gameIsPaused)
         {
-            // pauseMenu.SetActive(true);
+           pauseMenu.SetActive(true);
             Debug.Log("GameIsPaused");
             Time.timeScale = 0f;
         }
         else
         {
-            // pauseMenu.SetActive(false);
+            pauseMenu.SetActive(false);
             Debug.Log("GameIsResumed");
             Time.timeScale = 1.0f;
         }
