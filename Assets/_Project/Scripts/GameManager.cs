@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    
+    public static GameManager _instance;
+
 
     [Header("Timer")]
     public float gameTimer = 0.0f;
@@ -12,12 +15,14 @@ public class GameManager : MonoBehaviour
 
 
     [Header("Pause Menu")]
-    [SerializeField] private GameObject pauseMenu;
-    [SerializeField] private bool gameIsPaused;
+    public GameObject pauseMenu;
+    public bool gameIsPaused;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (_instance != null && _instance != this) Destroy(this);
+        else _instance = this;
 
     }
 
@@ -28,12 +33,12 @@ public class GameManager : MonoBehaviour
     }
     private void FixedUpdate()
     {
+       
         gameTimer += Time.deltaTime;
-        timerText.text = gameTimer.ToString();
+       
+        timerText.text = gameTimer.ToString("F2");
 
-
-
-        // Timer(gameTimer);
+       // Timer(gameTimer);
     }
 
 
