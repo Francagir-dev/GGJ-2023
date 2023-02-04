@@ -14,6 +14,7 @@ public class BasicRoot : MonoBehaviour, IRoot
     Quaternion originalRot;
 
     public int pullsRequired;
+    public ParticleSystem leafParticle;
 
     public UnityEvent OnPulledRoot { get => onPulledRoot; set => onPulledRoot = value; }
 
@@ -82,6 +83,7 @@ public class BasicRoot : MonoBehaviour, IRoot
         onPulledRoot?.Invoke();
         PopSoundManager._instance.Play();
         Destroy(weedsVisual.gameObject);
+        leafParticle.Play();
         weedsVisual = null;
         Destroy(gameObject, 5);
     }
