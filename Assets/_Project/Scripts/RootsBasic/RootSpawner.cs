@@ -30,6 +30,7 @@ public class RootSpawner : MonoBehaviour
         if (spawnRate > Random.Range(0, 100))
         {
             Instantiate(roots[Random.Range(0, roots.Count)], spawnPoint, Quaternion.identity, parentSpawn.transform);
+            GameManager._instance.currentRootsInField--;
         }
     }
 

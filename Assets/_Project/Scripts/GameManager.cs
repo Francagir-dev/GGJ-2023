@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public int expPointsLevelUP = 10;
     public ProgressBar expProgressBar;
     public int rootsGrabbed = 0;
+    public int currentRootsInField = 0;
 
     public int maxRootsInScreen = 300;
 
@@ -203,6 +204,20 @@ public class GameManager : MonoBehaviour
         BoostUpgrade(upgrade);
         upgradedAdded.Invoke(upgrade);
         AddToHUD(upgrade);
+    }
+
+    public void AddRoot()
+    {
+        currentRootsInField++;
+        if (currentRootsInField >= maxRootsInScreen)
+        {
+            GameOver();
+        }
+    }
+
+    void GameOver()
+    {
+
     }
 
     void AddToHUD(Upgrade upgrade)

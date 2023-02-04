@@ -108,6 +108,8 @@ public class BasicRoot : MonoBehaviour, IRoot
         PopSoundManager._instance.Play();
         Destroy(weedsVisual.gameObject);
         Destroy(GetComponent<Collider>());
+        GameManager._instance.currentRootsInField--;
+        GameManager._instance.rootsGrabbed++;
         leafParticle.Play();
         weedsVisual = null;
         Destroy(gameObject, 5);
