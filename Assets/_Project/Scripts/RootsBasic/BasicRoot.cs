@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class BasicRoot : MonoBehaviour, IRoot
 {
+    public Transform weedsVisual;
     public float scaleMult = 5f;
     public float pullForceRequired = 3;
     UnityEvent onPulledRoot;
@@ -13,31 +14,41 @@ public class BasicRoot : MonoBehaviour, IRoot
     Quaternion originalRot;
 
     public int pullsRequired;
+    AudioSource audioSource;
 
     public UnityEvent OnPulledRoot { get => onPulledRoot; set => onPulledRoot = value; }
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         onPulledRoot = new UnityEvent();
-        originalRot = transform.localRotation;
+        originalRot = weedsVisual.localRotation;
     }
 
     private void Update()
     {
+        if (weedsVisual != null)
+        {
+            WeedBehaviour();
+        }
+    }
+
+    private void WeedBehaviour()
+    {
         if (grabSource != null)
         {
-            transform.LookAt(grabSource, Vector3.up);
-            transform.localScale = (Vector3.one * 8.2655f) + Vector3.forward * Vector3.Distance(transform.position, grabSource.position) * scaleMult;
+            weedsVisual.LookAt(grabSource, Vector3.up);
+            weedsVisual.localScale = (Vector3.one * 8.2655f) + Vector3.forward * Vector3.Distance(transform.position, grabSource.position) * scaleMult;
 
             if (Vector3.Distance(formerPullingPoint, grabSource.position) > pullForceRequired)
             {
                 OnPull();
             }
         }
-        else 
+        else
         {
-            transform.localScale = Vector3.one * 8.2655f;
-            transform.localRotation = originalRot; 
+            weedsVisual.localScale = Vector3.one * 8.2655f;
+            weedsVisual.localRotation = originalRot;
         }
     }
 
@@ -71,6 +82,9 @@ public class BasicRoot : MonoBehaviour, IRoot
     public virtual void RootPulled()
     {
         onPulledRoot?.Invoke();
-        Destroy(gameObject);
+        audioSource.Play();
+        Destroy(weedsVisual.gameObject);
+        weedsVisual = null;
+        Destroy(gameObject, 5);
     }
 }
