@@ -1,15 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BasicRoot : MonoBehaviour, IRoot
 {
-    public float scaleMult = 1.2f;
+    public float scaleMult = 5f;
+    public float pullForceRequired = 3;
+    UnityEvent onPulledRoot;
     Transform grabSource;
+    Vector3 formerPullingPoint;
     Quaternion originalRot;
+
+    public int pullsRequired;
+
+    public UnityEvent OnPulledRoot { get => onPulledRoot; set => onPulledRoot = value; }
 
     private void Start()
     {
+        onPulledRoot = new UnityEvent();
         originalRot = transform.localRotation;
     }
 
@@ -19,6 +28,11 @@ public class BasicRoot : MonoBehaviour, IRoot
         {
             transform.LookAt(grabSource, Vector3.up);
             transform.localScale = (Vector3.one * 8.2655f) + Vector3.forward * Vector3.Distance(transform.position, grabSource.position) * scaleMult;
+
+            if (Vector3.Distance(formerPullingPoint, grabSource.position) > pullForceRequired)
+            {
+                OnPull();
+            }
         }
         else 
         {
@@ -27,18 +41,36 @@ public class BasicRoot : MonoBehaviour, IRoot
         }
     }
 
-    public void onGrab(Transform grabSource)
+    public virtual void OnGrab(Transform grabSource)
     {
         this.grabSource = grabSource;
+        ResetPullingPoint();
     }
 
-    public void onPull()
+    private void ResetPullingPoint()
     {
-        throw new System.NotImplementedException();
+        formerPullingPoint = grabSource.position;
     }
 
-    public void onRelease()
+    public virtual void OnPull()
     {
+        pullsRequired--;
+        ResetPullingPoint();
+        if (pullsRequired <= 0)
+        {
+            RootPulled();
+        }
+    }
+
+    public virtual void OnRelease()
+    {
+        onPulledRoot.RemoveAllListeners();
         grabSource = null;
+    }
+
+    public virtual void RootPulled()
+    {
+        onPulledRoot?.Invoke();
+        Destroy(gameObject);
     }
 }
