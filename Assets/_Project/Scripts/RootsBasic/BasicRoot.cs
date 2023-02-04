@@ -5,6 +5,10 @@ using UnityEngine.Events;
 
 public class BasicRoot : MonoBehaviour, IRoot
 {
+    public static float poisonEarth = 0;
+    public static float pullStrenght = 1;
+    public static float instaKillChance = 0;
+
     public Transform weedsVisual;
     public float scaleMult = 5f;
     public float pullForceRequired = 3;
@@ -13,7 +17,7 @@ public class BasicRoot : MonoBehaviour, IRoot
     Vector3 formerPullingPoint;
     Quaternion originalRot;
 
-    public int pullsRequired;
+    public float pullsRequired;
     public ParticleSystem leafParticle;
 
     public UnityEvent OnPulledRoot { get => onPulledRoot; set => onPulledRoot = value; }
@@ -26,6 +30,7 @@ public class BasicRoot : MonoBehaviour, IRoot
 
     private void Update()
     {
+        pullsRequired -= Time.deltaTime * poisonEarth;
         if (weedsVisual != null)
         {
             WeedBehaviour();
@@ -64,9 +69,9 @@ public class BasicRoot : MonoBehaviour, IRoot
 
     public virtual void OnPull()
     {
-        pullsRequired--;
+        pullsRequired -= 1 * pullStrenght;
         ResetPullingPoint();
-        if (pullsRequired <= 0)
+        if (pullsRequired <= 0 || instaKillChance < Random.Range(0f, 100f))
         {
             RootPulled();
         }
