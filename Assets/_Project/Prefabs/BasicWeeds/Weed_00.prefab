@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4529351307661290286}
   - component: {fileID: 4529351307661290321}
-  - component: {fileID: 4529351307661290323}
+  - component: {fileID: 2829297194078796808}
   m_Layer: 6
   m_Name: Weed_00
   m_TagString: Untagged
@@ -49,7 +49,7 @@ CapsuleCollider:
   m_Height: 0.11423494
   m_Direction: 1
   m_Center: {x: 0.040281, y: 0.010549928, z: 0.07970814}
---- !u!114 &4529351307661290323
+--- !u!114 &2829297194078796808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,13 +58,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4529351307661290322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7f13c1e039d574f84a37b1c6c5ec0e, type: 3}
+  m_Script: {fileID: 11500000, guid: 173ca7f6c6e512843a1e4c3e3b1449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   weedsVisual: {fileID: 8031311461730296331}
-  scaleMult: 0.8
+  scaleMult: 1.8
   pullForceRequired: 3
-  pullsRequired: 3
+  spawnTime: 0.3
+  pullsRequired: 1
   leafParticle: {fileID: 4529351307757959541}
 --- !u!1 &4529351307757959540
 GameObject:
