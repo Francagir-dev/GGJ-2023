@@ -119,6 +119,7 @@ public class GameManager : MonoBehaviour
         expProgressBar.maximum = (int)(expProgressBar.maximum * 1.5f);  //Add more exp need to lvl up
         expPointsLevelUP = expProgressBar.maximum;
         actualLevel++; //level Up
+       
         for (int i = 0; i < allUpgrades.Count; i++) {
             int upgradeRandom = Random.Range(0, allUpgrades.Count);
             ShowCards(allUpgrades[upgradeRandom]);
