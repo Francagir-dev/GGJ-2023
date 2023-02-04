@@ -14,13 +14,11 @@ public class BasicRoot : MonoBehaviour, IRoot
     Quaternion originalRot;
 
     public int pullsRequired;
-    AudioSource audioSource;
 
     public UnityEvent OnPulledRoot { get => onPulledRoot; set => onPulledRoot = value; }
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
         onPulledRoot = new UnityEvent();
         originalRot = weedsVisual.localRotation;
     }
@@ -82,7 +80,7 @@ public class BasicRoot : MonoBehaviour, IRoot
     public virtual void RootPulled()
     {
         onPulledRoot?.Invoke();
-        audioSource.Play();
+        PopSoundManager._instance.Play();
         Destroy(weedsVisual.gameObject);
         weedsVisual = null;
         Destroy(gameObject, 5);
