@@ -14,14 +14,18 @@ public class GameManager : MonoBehaviour
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
-    public bool gameIsPaused;
+    public bool gameIsPaused = false;
 
-    [Header("Game System")]
-    public long points;
+    [Header("ExperienciA")]
+    public long points=0;
+    public int actualLevel = 0;
+    public int actualExpPoints;
+    public int ExpPointsLevelUP;
+    public ProgressBar expProgressBar;
+
     
     
-    
-    // Start is called before the first frame update
+   // Start is called before the first frame update
     void Start()
     {
         Application.targetFrameRate = 60;
@@ -33,8 +37,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) PauseMenu();
-
-
     }
     private void FixedUpdate()
     {
@@ -58,8 +60,6 @@ public class GameManager : MonoBehaviour
         minutes = (int)(gameTimer / 60);
         seconds = (int)(gameTimer % 60);
 
-
-
         //Formatting Seconds
         if (seconds < 10) secondsString = "0" + seconds.ToString();
         else secondsString = seconds.ToString();
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         if (minutes > 9) minutesString = minutes.ToString();           
         else  minutesString = "0" + minutes.ToString();
             
-         //Setting text
+        //Setting text
         timerText.text = minutesString + ":" + secondsString;
     }
     public void PauseMenu()
@@ -87,10 +87,27 @@ public class GameManager : MonoBehaviour
             Debug.Log("GameIsResumed");
             Time.timeScale = 1.0f;
         }
-
     }
 
+    public void CheckEXP() {
+        //if I have more exp than the requiered
+        if (actualExpPoints > ExpPointsLevelUP)
+        {
+            actualExpPoints = ExpPointsLevelUP - actualExpPoints; //save extra
+            LevelUP();
+        }
+        else if (actualExpPoints == ExpPointsLevelUP) { actualExpPoints = 0; }
+       
+       
+       
+    }
+    public void LevelUP() {
+        actualLevel++; //level Up      
+        expProgressBar.maximum = (int)(expProgressBar.maximum * 1.35f);  //Add more exp need to lvl up
+    }
 }
+   
+
 public struct PlayerInfo {
     string name;
     float durationRun;
