@@ -43,12 +43,12 @@ public class GameManager : MonoBehaviour
         Counter();
     }
 
+    #region Timer
     /// <summary>
     /// Timer sums time and change text
     /// </summary>   
     void Counter()
     {
-
         int minutes = 0;
         int seconds = 0;
 
@@ -71,6 +71,9 @@ public class GameManager : MonoBehaviour
         //Setting text
         timerText.text = minutesString + ":" + secondsString;
     }
+    #endregion
+
+    #region Pause
     public void PauseMenu()
     {
         gameIsPaused = !gameIsPaused;
@@ -88,7 +91,9 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1.0f;
         }
     }
+    #endregion
 
+    #region EXP
     public void CheckEXP() {
         //if I have more exp than the requiered
         if (actualExpPoints > ExpPointsLevelUP)
@@ -96,22 +101,28 @@ public class GameManager : MonoBehaviour
             actualExpPoints = ExpPointsLevelUP - actualExpPoints; //save extra
             LevelUP();
         }
-        else if (actualExpPoints == ExpPointsLevelUP) { actualExpPoints = 0; }
-       
-       
-       
+        else if (actualExpPoints == ExpPointsLevelUP) { actualExpPoints = 0; 
+            LevelUP();  
+        }      
     }
     public void LevelUP() {
         actualLevel++; //level Up      
         expProgressBar.maximum = (int)(expProgressBar.maximum * 1.35f);  //Add more exp need to lvl up
     }
+    public void AddExp(int expToSum) {
+        actualExpPoints += expToSum;
+    }
+
+    #endregion
 }
-   
+
 
 public struct PlayerInfo {
+
     string name;
     float durationRun;
     long pointsRun;
     
+
 }
 
