@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     private Upgrade randomizedUpgrade;
 
-    public UnityEvent <Upgrade >upgradedAdded;
+    public UnityEvent<Upgrade> upgradedAdded;
 
     // Start is called before the first frame update
     void Start()
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
     {
         GameObject upgrade = Instantiate(prefabCard, Vector3.zero, Quaternion.identity);
         upgrade.GetComponent<UpgradeDisplay>().upgrade = upgradeToDisplay;
-        upgrade.GetComponent<Button>().onClick.AddListener(delegate() { AddUpgradeToList(upgradeToDisplay); });
+        upgrade.GetComponent<Button>().onClick.AddListener(delegate () { AddUpgradeToList(upgradeToDisplay);});
 
     }
 
@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
         {
             CheckUpgrade();
 
-        }      
+        }
     }
 
 
@@ -188,7 +188,8 @@ public class GameManager : MonoBehaviour
                     CheckUpgrade();
                 }
             }
-            else {
+            else
+            {
                 showUpgradesList.Add(randomizedUpgrade);
                 ShowCards(randomizedUpgrade);
             }
@@ -196,10 +197,18 @@ public class GameManager : MonoBehaviour
         #endregion
     }
 
-    void AddUpgradeToList(Upgrade upgrade) {
+    void AddUpgradeToList(Upgrade upgrade)
+    {
         playerUpgrades.Add(upgrade);
         BoostUpgrade(upgrade);
         upgradedAdded.Invoke(upgrade);
+        AddToHUD(upgrade);
+    }
+
+    void AddToHUD(Upgrade upgrade)
+    {
+        GameObject iconUpgrade = Instantiate(prefabIcon, Vector3.zero, Quaternion.identity, parentPlayerUpgrades.transform);
+        iconUpgrade.GetComponent<Image>().sprite = upgrade.icon;
     }
 }
 
