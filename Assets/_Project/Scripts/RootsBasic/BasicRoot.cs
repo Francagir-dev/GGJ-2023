@@ -37,7 +37,7 @@ public class BasicRoot : MonoBehaviour, IRoot
         if (grabSource != null)
         {
             weedsVisual.LookAt(grabSource, Vector3.up);
-            weedsVisual.localScale = (Vector3.one * 8.2655f) + Vector3.forward * Vector3.Distance(transform.position, grabSource.position) * scaleMult;
+            weedsVisual.localScale = Vector3.one + Vector3.forward * Vector3.Distance(transform.position, grabSource.position) * scaleMult;
 
             if (Vector3.Distance(formerPullingPoint, grabSource.position) > pullForceRequired)
             {
@@ -46,7 +46,7 @@ public class BasicRoot : MonoBehaviour, IRoot
         }
         else
         {
-            weedsVisual.localScale = Vector3.one * 8.2655f;
+            weedsVisual.localScale = Vector3.one;
             weedsVisual.localRotation = originalRot;
         }
     }
