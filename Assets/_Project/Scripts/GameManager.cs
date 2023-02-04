@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [Header("Pause Menu")]
     public GameObject pauseMenu;
     public bool gameIsPaused = false;
-
+    
     [Header("Experience")]    
     public int actualLevel = 0;
     public int actualExpPoints=0;
@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public GameObject parentUI;
     public List<Upgrade> allUpgrades = new List<Upgrade>();
     public List<Upgrade> playerUpgrades = new List<Upgrade>();
+
 
    // Start is called before the first frame update
     void Start()
@@ -102,6 +103,7 @@ public class GameManager : MonoBehaviour
     #region EXP
     public void CheckEXP() {
         //if I have more exp than the requiered
+
         if (actualExpPoints > expPointsLevelUP)
         {
             actualExpPoints = expPointsLevelUP - actualExpPoints; //save extra
@@ -128,6 +130,7 @@ public class GameManager : MonoBehaviour
 
 
     #endregion
+
 }
 
 
