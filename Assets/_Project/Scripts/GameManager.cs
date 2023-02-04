@@ -152,8 +152,7 @@ public class GameManager : MonoBehaviour
         {
             CheckUpgrade();
 
-        }
-        for(int i)
+        }      
     }
 
 
