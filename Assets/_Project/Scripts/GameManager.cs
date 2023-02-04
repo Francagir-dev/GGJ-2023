@@ -10,28 +10,34 @@ public class GameManager : MonoBehaviour
 
     [Header("Timer")]
     public float gameTimer = 0.0f;
-    [SerializeField] private TextMeshProUGUI timerText; 
+    [SerializeField] private TextMeshProUGUI timerText;
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
     public bool gameIsPaused = false;
-    
-    [Header("Experience")]    
+
+    [Header("Experience")]
     public int actualLevel = 0;
-    public int actualExpPoints=0;
+    public int actualExpPoints = 0;
     public int expPointsLevelUP = 10;
     public ProgressBar expProgressBar;
-    public int rootsGrabbed=0;
+    public int rootsGrabbed = 0;
 
-    public int maxRootsInScreen=300;
+    public int maxRootsInScreen = 300;
 
     [Header("Upgrades")]
-    public GameObject parentUI;
+    public GameObject parentPlayerUpgrades;
+    public GameObject parentUpgradesForSelect;
+    public GameObject prefabCard;
+    public GameObject prefabIcon;
+
     public List<Upgrade> allUpgrades = new List<Upgrade>();
     public List<Upgrade> playerUpgrades = new List<Upgrade>();
+    private List<Upgrade> showUpgradesList = new List<Upgrade>();
 
+    private Upgrade randomizedUpgrade;
 
-   // Start is called before the first frame update
+    // Start is called before the first frame update
     void Start()
     {
         Application.targetFrameRate = 60;
@@ -72,9 +78,9 @@ public class GameManager : MonoBehaviour
         else secondsString = seconds.ToString();
 
         //Formatting Minutes
-        if (minutes > 9) minutesString = minutes.ToString();           
-        else  minutesString = "0" + minutes.ToString();
-            
+        if (minutes > 9) minutesString = minutes.ToString();
+        else minutesString = "0" + minutes.ToString();
+
         //Setting text
         timerText.text = minutesString + ":" + secondsString;
     }
@@ -101,45 +107,98 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region EXP
-    public void CheckEXP() {
+    public void CheckEXP()
+    {
         //if I have more exp than the requiered
-
         if (actualExpPoints > expPointsLevelUP)
         {
             actualExpPoints = expPointsLevelUP - actualExpPoints; //save extra
             LevelUP();
         }
-        else if (actualExpPoints == expPointsLevelUP) { actualExpPoints = 0; 
-            LevelUP();  
+        else if (actualExpPoints == expPointsLevelUP)
+        {
+            actualExpPoints = 0;
+            LevelUP();
         }
         expProgressBar.current = actualExpPoints;
     }
-    public void LevelUP() {
+    public void LevelUP()
+    {
         expProgressBar.maximum = (int)(expProgressBar.maximum * 1.5f);  //Add more exp need to lvl up
         expPointsLevelUP = expProgressBar.maximum;
-        actualLevel++; //level Up     
+        actualLevel++; //level Up
+        SelectUpgrades();
+
+
     }
-    public void AddExp(int expToSum) {
-        actualExpPoints += expToSum;       
+    public void AddExp(int expToSum)
+    {
+        actualExpPoints += expToSum;
     }
 
     #endregion
 
     #region Upgrades
 
+    public void ShowCards(Upgrade upgradeToDisplay)
+    {
+        GameObject upgrade = Instantiate(prefabCard, Vector3.zero, Quaternion.identity);
+        upgrade.GetComponent<UpgradeDisplay>().upgrade = upgradeToDisplay;
+    }
+
+    void SelectUpgrades()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            CheckUpgrade();
+
+        }
+        for(int i)
+    }
 
 
-    #endregion
+    public Upgrade RandomUpgrade()
+    {
+        return allUpgrades[Random.Range(0, allUpgrades.Count)];
+    }
+    public void BoostUpgrade()
+    {
+        playerUpgrades[playerUpgrades.IndexOf(randomizedUpgrade)].level = playerUpgrades[playerUpgrades.IndexOf(randomizedUpgrade)].level++;
+    }
 
+    public void CheckUpgrade()
+    {
+        randomizedUpgrade = RandomUpgrade();
+        for (int i = 0; i < playerUpgrades.Count; i++)
+        {
+            if (playerUpgrades[i].upgradeType.Equals("Tool") && randomizedUpgrade.upgradeType.Equals("Tool"))
+            {
+                if (playerUpgrades[i].name.Equals(randomizedUpgrade.name))
+                {
+                    showUpgradesList.Add(randomizedUpgrade);
+                    ShowCards(randomizedUpgrade);
+                }
+                else
+                {
+                    CheckUpgrade();
+                }
+            }
+            else {
+                showUpgradesList.Add(randomizedUpgrade);
+                ShowCards(randomizedUpgrade);
+            }
+        }
+        #endregion
+    }
 }
 
-
-public struct PlayerInfo {
+public struct PlayerInfo
+{
 
     string name;
     float durationRun;
     long pointsRun;
-    
+
 
 }
 
