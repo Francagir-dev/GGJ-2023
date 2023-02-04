@@ -30,8 +30,12 @@ public class GameManager : MonoBehaviour
     public GameObject parentUpgradesForSelect;
     public GameObject prefabCard;
     public GameObject prefabIcon;
+
     public List<Upgrade> allUpgrades = new List<Upgrade>();
     public List<Upgrade> playerUpgrades = new List<Upgrade>();
+    private List<Upgrade> showUpgradesList = new List<Upgrade>();
+
+    private Upgrade randomizedUpgrade;
 
     // Start is called before the first frame update
     void Start()
@@ -103,32 +107,32 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region EXP
-    public void CheckEXP() {
+    public void CheckEXP()
+    {
         //if I have more exp than the requiered
         if (actualExpPoints > expPointsLevelUP)
         {
             actualExpPoints = expPointsLevelUP - actualExpPoints; //save extra
             LevelUP();
         }
-        else if (actualExpPoints == expPointsLevelUP) { actualExpPoints = 0;
+        else if (actualExpPoints == expPointsLevelUP)
+        {
+            actualExpPoints = 0;
             LevelUP();
         }
         expProgressBar.current = actualExpPoints;
     }
-    public void LevelUP() {
+    public void LevelUP()
+    {
         expProgressBar.maximum = (int)(expProgressBar.maximum * 1.5f);  //Add more exp need to lvl up
         expPointsLevelUP = expProgressBar.maximum;
         actualLevel++; //level Up
-       
-        for (int i = 0; i < allUpgrades.Count; i++) {
-            int upgradeRandom = Random.Range(0, allUpgrades.Count);
-            ShowCards(allUpgrades[upgradeRandom]);
-            playerUpgrades.Add(allUpgrades[upgradeRandom]);
-            allUpgrades.RemoveAt(upgradeRandom);
-        }       
-                     
+        SelectUpgrades();
+
+
     }
-    public void AddExp(int expToSum) {
+    public void AddExp(int expToSum)
+    {
         actualExpPoints += expToSum;
     }
 
@@ -136,23 +140,65 @@ public class GameManager : MonoBehaviour
 
     #region Upgrades
 
-    public void ShowCards(Upgrade upgradeToDisplay) {
+    public void ShowCards(Upgrade upgradeToDisplay)
+    {
         GameObject upgrade = Instantiate(prefabCard, Vector3.zero, Quaternion.identity);
         upgrade.GetComponent<UpgradeDisplay>().upgrade = upgradeToDisplay;
     }
 
+    void SelectUpgrades()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            CheckUpgrade();
+
+        }
+        for(int i)
+    }
 
 
-    #endregion
+    public Upgrade RandomUpgrade()
+    {
+        return allUpgrades[Random.Range(0, allUpgrades.Count)];
+    }
+    public void BoostUpgrade()
+    {
+        playerUpgrades[playerUpgrades.IndexOf(randomizedUpgrade)].level = playerUpgrades[playerUpgrades.IndexOf(randomizedUpgrade)].level++;
+    }
+
+    public void CheckUpgrade()
+    {
+        randomizedUpgrade = RandomUpgrade();
+        for (int i = 0; i < playerUpgrades.Count; i++)
+        {
+            if (playerUpgrades[i].upgradeType.Equals("Tool") && randomizedUpgrade.upgradeType.Equals("Tool"))
+            {
+                if (playerUpgrades[i].name.Equals(randomizedUpgrade.name))
+                {
+                    showUpgradesList.Add(randomizedUpgrade);
+                    ShowCards(randomizedUpgrade);
+                }
+                else
+                {
+                    CheckUpgrade();
+                }
+            }
+            else {
+                showUpgradesList.Add(randomizedUpgrade);
+                ShowCards(randomizedUpgrade);
+            }
+        }
+        #endregion
+    }
 }
 
-
-public struct PlayerInfo {
+public struct PlayerInfo
+{
 
     string name;
     float durationRun;
     long pointsRun;
-    
+
 
 }
 
