@@ -10,27 +10,30 @@ public class GameManager : MonoBehaviour
 
     [Header("Timer")]
     public float gameTimer = 0.0f;
-    [SerializeField] private TextMeshProUGUI timerText; 
+    [SerializeField] private TextMeshProUGUI timerText;
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
     public bool gameIsPaused = false;
 
-    [Header("Experience")]    
+    [Header("Experience")]
     public int actualLevel = 0;
-    public int actualExpPoints=0;
+    public int actualExpPoints = 0;
     public int expPointsLevelUP = 10;
     public ProgressBar expProgressBar;
-    public int rootsGrabbed=0;
+    public int rootsGrabbed = 0;
 
-    public int maxRootsInScreen=300;
+    public int maxRootsInScreen = 300;
 
     [Header("Upgrades")]
-    public GameObject parentUI;
+    public GameObject parentPlayerUpgrades;
+    public GameObject parentUpgradesForSelect;
+    public GameObject prefabCard;
+    public GameObject prefabIcon;
     public List<Upgrade> allUpgrades = new List<Upgrade>();
     public List<Upgrade> playerUpgrades = new List<Upgrade>();
 
-   // Start is called before the first frame update
+    // Start is called before the first frame update
     void Start()
     {
         Application.targetFrameRate = 60;
@@ -71,9 +74,9 @@ public class GameManager : MonoBehaviour
         else secondsString = seconds.ToString();
 
         //Formatting Minutes
-        if (minutes > 9) minutesString = minutes.ToString();           
-        else  minutesString = "0" + minutes.ToString();
-            
+        if (minutes > 9) minutesString = minutes.ToString();
+        else minutesString = "0" + minutes.ToString();
+
         //Setting text
         timerText.text = minutesString + ":" + secondsString;
     }
@@ -107,23 +110,35 @@ public class GameManager : MonoBehaviour
             actualExpPoints = expPointsLevelUP - actualExpPoints; //save extra
             LevelUP();
         }
-        else if (actualExpPoints == expPointsLevelUP) { actualExpPoints = 0; 
-            LevelUP();  
+        else if (actualExpPoints == expPointsLevelUP) { actualExpPoints = 0;
+            LevelUP();
         }
         expProgressBar.current = actualExpPoints;
     }
     public void LevelUP() {
         expProgressBar.maximum = (int)(expProgressBar.maximum * 1.5f);  //Add more exp need to lvl up
         expPointsLevelUP = expProgressBar.maximum;
-        actualLevel++; //level Up     
+        actualLevel++; //level Up
+        for (int i = 0; i < allUpgrades.Count; i++) {
+            int upgradeRandom = Random.Range(0, allUpgrades.Count);
+            ShowCards(allUpgrades[upgradeRandom]);
+            playerUpgrades.Add(allUpgrades[upgradeRandom]);
+            allUpgrades.RemoveAt(upgradeRandom);
+        }       
+                     
     }
     public void AddExp(int expToSum) {
-        actualExpPoints += expToSum;       
+        actualExpPoints += expToSum;
     }
 
     #endregion
 
     #region Upgrades
+
+    public void ShowCards(Upgrade upgradeToDisplay) {
+        GameObject upgrade = Instantiate(prefabCard, Vector3.zero, Quaternion.identity);
+        upgrade.GetComponent<UpgradeDisplay>().upgrade = upgradeToDisplay;
+    }
 
 
 
