@@ -15,16 +15,22 @@ public class GameManager : MonoBehaviour
     [Header("Pause Menu")]
     public GameObject pauseMenu;
     public bool gameIsPaused = false;
-
-    [Header("ExperienciA")]
-    public long points=0;
+    
+    [Header("Experience")]    
     public int actualLevel = 0;
-    public int actualExpPoints;
-    public int ExpPointsLevelUP;
+    public int actualExpPoints=0;
+    public int expPointsLevelUP = 10;
     public ProgressBar expProgressBar;
+    public int rootsGrabbed=0;
 
-    
-    
+    public int maxRootsInScreen=300;
+
+    [Header("Upgrades")]
+    public GameObject parentUI;
+    public List<Upgrade> allUpgrades = new List<Upgrade>();
+    public List<Upgrade> playerUpgrades = new List<Upgrade>();
+
+
    // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +47,7 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         Counter();
+        CheckEXP();
     }
 
     #region Timer
@@ -96,24 +103,34 @@ public class GameManager : MonoBehaviour
     #region EXP
     public void CheckEXP() {
         //if I have more exp than the requiered
-        if (actualExpPoints > ExpPointsLevelUP)
+
+        if (actualExpPoints > expPointsLevelUP)
         {
-            actualExpPoints = ExpPointsLevelUP - actualExpPoints; //save extra
+            actualExpPoints = expPointsLevelUP - actualExpPoints; //save extra
             LevelUP();
         }
-        else if (actualExpPoints == ExpPointsLevelUP) { actualExpPoints = 0; 
+        else if (actualExpPoints == expPointsLevelUP) { actualExpPoints = 0; 
             LevelUP();  
-        }      
+        }
+        expProgressBar.current = actualExpPoints;
     }
     public void LevelUP() {
-        actualLevel++; //level Up      
-        expProgressBar.maximum = (int)(expProgressBar.maximum * 1.35f);  //Add more exp need to lvl up
+        expProgressBar.maximum = (int)(expProgressBar.maximum * 1.5f);  //Add more exp need to lvl up
+        expPointsLevelUP = expProgressBar.maximum;
+        actualLevel++; //level Up     
     }
     public void AddExp(int expToSum) {
-        actualExpPoints += expToSum;
+        actualExpPoints += expToSum;       
     }
 
     #endregion
+
+    #region Upgrades
+
+
+
+    #endregion
+
 }
 
 

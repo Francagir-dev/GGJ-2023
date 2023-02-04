@@ -7,7 +7,9 @@ public class ProgressBar : MonoBehaviour
 
     [Header("Values")]
     public int minimum = 0;
-    public int maximum;
+
+    public int maximum=19;
+
     public int current = 0;
 
     [Header("Components")]

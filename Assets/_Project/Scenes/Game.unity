@@ -176,8 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minimum: 0
-  maximum: 100
-  current: 2
+  maximum: 10
+  current: 1
   mask: {fileID: 2014670507}
   fill: {fileID: 1794114220}
   fillColor: {r: 0.1724813, g: 0.6351309, b: 0.7169812, a: 1}
@@ -606,7 +606,7 @@ MonoBehaviour:
     m_Right: 50
     m_Top: 5
     m_Bottom: 5
-  m_ChildAlignment: 0
+  m_ChildAlignment: 3
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 35, y: 35}
@@ -956,10 +956,23 @@ MonoBehaviour:
   timerText: {fileID: 1893362775}
   pauseMenu: {fileID: 1047404364}
   gameIsPaused: 0
-  points: 0
   actualLevel: 0
   actualExpPoints: 0
-  ExpPointsLevelUP: 0
+  expPointsLevelUP: 10
+  expProgressBar: {fileID: 387717128}
+  rootsGrabbed: 0
+  maxRootsInScreen: 300
+  parentUI: {fileID: 0}
+  allUpgrades:
+  - {fileID: 11400000, guid: 5485bf2907cae564d9acf187d897d737, type: 2}
+  - {fileID: 11400000, guid: b7ca65af51b173d439e16b32fdcc8326, type: 2}
+  - {fileID: 11400000, guid: 00b4a1e632fa93a4c9fa4c247732c43c, type: 2}
+  - {fileID: 11400000, guid: fcc9ca60bb88a1b4e891accc978af17a, type: 2}
+  - {fileID: 11400000, guid: e0fca9a82ff78e04ca1a61adfee86768, type: 2}
+  - {fileID: 11400000, guid: 313fc5237fbd14640996497731feeed5, type: 2}
+  - {fileID: 11400000, guid: 6279fcf85dc5ffe42b030b14962437ac, type: 2}
+  - {fileID: 11400000, guid: ea59e0128739af940961ae5ac750a8cf, type: 2}
+  playerUpgrades: []
 --- !u!1 &2014670504
 GameObject:
   m_ObjectHideFlags: 0
