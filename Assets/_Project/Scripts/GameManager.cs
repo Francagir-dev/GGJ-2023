@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +38,8 @@ public class GameManager : MonoBehaviour
     private List<Upgrade> showUpgradesList = new List<Upgrade>();
 
     private Upgrade randomizedUpgrade;
+
+    public UnityEvent <Upgrade >upgradedAdded;
 
     // Start is called before the first frame update
     void Start()
@@ -144,6 +148,8 @@ public class GameManager : MonoBehaviour
     {
         GameObject upgrade = Instantiate(prefabCard, Vector3.zero, Quaternion.identity);
         upgrade.GetComponent<UpgradeDisplay>().upgrade = upgradeToDisplay;
+        upgrade.GetComponent<Button>().onClick.AddListener(delegate() { AddUpgradeToList(upgradeToDisplay); });
+
     }
 
     void SelectUpgrades()
@@ -160,9 +166,9 @@ public class GameManager : MonoBehaviour
     {
         return allUpgrades[Random.Range(0, allUpgrades.Count)];
     }
-    public void BoostUpgrade()
+    public void BoostUpgrade(Upgrade upgradeToCheck)
     {
-        playerUpgrades[playerUpgrades.IndexOf(randomizedUpgrade)].level = playerUpgrades[playerUpgrades.IndexOf(randomizedUpgrade)].level++;
+        playerUpgrades[playerUpgrades.IndexOf(upgradeToCheck)].level = playerUpgrades[playerUpgrades.IndexOf(upgradeToCheck)].level++;
     }
 
     public void CheckUpgrade()
@@ -188,6 +194,12 @@ public class GameManager : MonoBehaviour
             }
         }
         #endregion
+    }
+
+    void AddUpgradeToList(Upgrade upgrade) {
+        playerUpgrades.Add(upgrade);
+        BoostUpgrade(upgrade);
+        upgradedAdded.Invoke(upgrade);
     }
 }
 

@@ -15,4 +15,5 @@ MonoBehaviour:
   upgradeName: Big Hands
   upgradeType: Pasive
   description: More range and can grab more roots with one hand
+  level: 0
   icon: {fileID: 0}
