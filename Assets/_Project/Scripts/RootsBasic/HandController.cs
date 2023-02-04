@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HandController : MonoBehaviour
 {
+    public static float handRadiousMult = 1;
+
     public Camera targetCamera;
     public Transform handVis;
     public float handDistance;
@@ -17,6 +19,7 @@ public class HandController : MonoBehaviour
 
     public Vector3 grabPoint;
     public List<IRoot> pickedRoots;
+    public string toolAquired;
 
     private void Start()
     {
@@ -92,7 +95,7 @@ public class HandController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Collider[] hits = Physics.OverlapSphere(hitInfo.point, 1, rootsLayer);
+            Collider[] hits = Physics.OverlapSphere(hitInfo.point, 1 * handRadiousMult, rootsLayer);
             pickedRoots = FilterRoots(hits);
 
             if (pickedRoots.Count > 0)

@@ -5,6 +5,11 @@ using UnityEngine.Events;
 
 public class BasicRoot : MonoBehaviour, IRoot
 {
+    public static float poisonEarth = 0;
+    public static float pullStrenght = 1;
+    public static float instaKillChance = 0;
+
+    public Transform weedsVisual;
     public float scaleMult = 5f;
     public float pullForceRequired = 3;
     UnityEvent onPulledRoot;
@@ -12,32 +17,42 @@ public class BasicRoot : MonoBehaviour, IRoot
     Vector3 formerPullingPoint;
     Quaternion originalRot;
 
-    public int pullsRequired;
+    public float pullsRequired;
+    public ParticleSystem leafParticle;
 
     public UnityEvent OnPulledRoot { get => onPulledRoot; set => onPulledRoot = value; }
 
     private void Start()
     {
         onPulledRoot = new UnityEvent();
-        originalRot = transform.localRotation;
+        originalRot = weedsVisual.localRotation;
     }
 
     private void Update()
     {
+        pullsRequired -= Time.deltaTime * poisonEarth;
+        if (weedsVisual != null)
+        {
+            WeedBehaviour();
+        }
+    }
+
+    private void WeedBehaviour()
+    {
         if (grabSource != null)
         {
-            transform.LookAt(grabSource, Vector3.up);
-            transform.localScale = (Vector3.one * 8.2655f) + Vector3.forward * Vector3.Distance(transform.position, grabSource.position) * scaleMult;
+            weedsVisual.LookAt(grabSource, Vector3.up);
+            weedsVisual.localScale = Vector3.one + Vector3.forward * Vector3.Distance(transform.position, grabSource.position) * scaleMult;
 
             if (Vector3.Distance(formerPullingPoint, grabSource.position) > pullForceRequired)
             {
                 OnPull();
             }
         }
-        else 
+        else
         {
-            transform.localScale = Vector3.one * 8.2655f;
-            transform.localRotation = originalRot; 
+            weedsVisual.localScale = Vector3.one;
+            weedsVisual.localRotation = originalRot;
         }
     }
 
@@ -54,9 +69,9 @@ public class BasicRoot : MonoBehaviour, IRoot
 
     public virtual void OnPull()
     {
-        pullsRequired--;
+        pullsRequired -= 1 * pullStrenght;
         ResetPullingPoint();
-        if (pullsRequired <= 0)
+        if (pullsRequired <= 0 || instaKillChance < Random.Range(0f, 100f))
         {
             RootPulled();
         }
@@ -71,6 +86,10 @@ public class BasicRoot : MonoBehaviour, IRoot
     public virtual void RootPulled()
     {
         onPulledRoot?.Invoke();
-        Destroy(gameObject);
+        PopSoundManager._instance.Play();
+        Destroy(weedsVisual.gameObject);
+        leafParticle.Play();
+        weedsVisual = null;
+        Destroy(gameObject, 5);
     }
 }
