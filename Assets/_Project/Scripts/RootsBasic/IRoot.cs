@@ -1,8 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public interface IRoot
 {
-    public void onGrab(Transform grabSource);
-    public void onPull();
-    public void onRelease();
+    UnityEvent OnPulledRoot { get; set; }
+
+    public void OnGrab(Transform grabSource);
+    public void OnPull();
+    public void OnRelease();
+    public void RootPulled();
 }

@@ -10,7 +10,6 @@ public class HandController : MonoBehaviour
 
     public GameObject openHand;
     public GameObject closedHand;
-    public GameObject withRoot;
 
     public RaycastHit hitInfo;
     public LayerMask pointerLayer;
@@ -44,30 +43,33 @@ public class HandController : MonoBehaviour
 
         if (Physics.Raycast(inputRay, out hitInfo, Mathf.Infinity, pointerLayer))
         {
-            Vector3 contactPoint = hitInfo.point;
-            Vector3 targetPosition = contactPoint + (-handDistance * inputRay.direction);
+            handVis.position = CalculateHandPosition(inputRay);
+        }
+    }
 
-            if (pickedRoots.Count > 0)
-            {
-                //handVis.position = targetPosition;
-                float radius = 4; //radius of *black circle*
-                Vector3 centerPosition = grabPoint; //center of *black circle*
-                float distance = Vector3.Distance(targetPosition, centerPosition); //distance from ~green object~ to *black circle*
-                Debug.Log(distance);
+    private Vector3 CalculateHandPosition(Ray inputRay)
+    {
+        Vector3 contactPoint = hitInfo.point;
+        Vector3 targetPosition = contactPoint + (-handDistance * inputRay.direction);
 
-                if (distance > radius) //If the distance is less than the radius, it is already within the circle.
-                {
-                    Vector3 fromOriginToObject = targetPosition - centerPosition; //~GreenPosition~ - *BlackCenter*
-                    fromOriginToObject *= radius / distance; //Multiply by radius //Divide by Distance
-                    targetPosition = centerPosition + fromOriginToObject; //*BlackCenter* + all that Math
-                    handVis.position = targetPosition;
-                } else handVis.position = targetPosition;
-            }
-            else
+        if (pickedRoots.Count > 0)
+        {
+            //handVis.position = targetPosition;
+            float radius = 4; //radius of *black circle*
+            Vector3 centerPosition = grabPoint; //center of *black circle*
+            float distance = Vector3.Distance(targetPosition, centerPosition); //distance from ~green object~ to *black circle*
+            Debug.Log(distance);
+
+            if (distance > radius) //If the distance is less than the radius, it is already within the circle.
             {
-                handVis.position = targetPosition;
+                Vector3 fromOriginToObject = targetPosition - centerPosition; //~GreenPosition~ - *BlackCenter*
+                fromOriginToObject *= radius / distance; //Multiply by radius //Divide by Distance
+                targetPosition = centerPosition + fromOriginToObject; //*BlackCenter* + all that Math
+                return targetPosition;
             }
         }
+        
+        return targetPosition;
     }
 
     private void MouseInput(bool mousePress)
@@ -76,20 +78,14 @@ public class HandController : MonoBehaviour
         {
             foreach (var root in pickedRoots)
             {
-                root.onRelease();
+                root.OnRelease();
             }
 
-            pickedRoots = new List<IRoot>();
+            pickedRoots.Clear();
         }
 
         openHand.SetActive(!mousePress);
         closedHand.SetActive(mousePress);
-
-        if (pickedRoots.Count > 0)
-        {
-            withRoot.SetActive(mousePress);
-        }
-        else withRoot.SetActive(false);
     }
 
     private void Grab()
@@ -114,7 +110,8 @@ public class HandController : MonoBehaviour
             if (collider.TryGetComponent(out IRoot root))
             {
                 foundRoots.Add(root);
-                root.onGrab(handVis);
+                root.OnGrab(handVis);
+                root.OnPulledRoot.AddListener(() => pickedRoots.Remove(root));
             }
         }
 
