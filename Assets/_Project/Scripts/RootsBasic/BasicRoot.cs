@@ -12,6 +12,7 @@ public class BasicRoot : MonoBehaviour, IRoot
     public Transform weedsVisual;
     public float scaleMult = 5f;
     public float pullForceRequired = 3;
+    public float spawnTime = .3f;
     UnityEvent onPulledRoot;
     Transform grabSource;
     Vector3 formerPullingPoint;
@@ -26,6 +27,24 @@ public class BasicRoot : MonoBehaviour, IRoot
     {
         onPulledRoot = new UnityEvent();
         originalRot = weedsVisual.localRotation;
+        SpawnRoot();
+    }
+
+    public void SpawnRoot()
+    {
+        transform.localScale = Vector3.zero;
+        transform.Rotate(Vector3.forward * Random.Range(0, 360));
+        StartCoroutine(RootSpawn());
+        IEnumerator RootSpawn()
+        {
+            float timer = spawnTime;
+            while (timer > 0)
+            {
+                timer -= Time.deltaTime;
+                transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, timer / spawnTime);
+                yield return null;
+            }
+        }
     }
 
     private void Update()
@@ -88,6 +107,7 @@ public class BasicRoot : MonoBehaviour, IRoot
         onPulledRoot?.Invoke();
         PopSoundManager._instance.Play();
         Destroy(weedsVisual.gameObject);
+        Destroy(GetComponent<Collider>());
         leafParticle.Play();
         weedsVisual = null;
         Destroy(gameObject, 5);
