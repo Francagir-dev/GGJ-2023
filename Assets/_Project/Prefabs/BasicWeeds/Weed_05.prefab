@@ -45,7 +45,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.58
+  m_Radius: 0.2
   m_Height: 0.11423494
   m_Direction: 1
   m_Center: {x: 0.040281, y: 0.010549928, z: 0.07970814}
@@ -63,7 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weedsVisual: {fileID: 667111974498666172}
   scaleMult: 1.3
-  pullForceRequired: 3
+  pullForceRequired: 1
   spawnTime: 0.3
   pullsRequired: 1
   leafParticle: {fileID: 4529351307757959541}
@@ -735,7 +735,7 @@ ParticleSystem:
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 0}
+    m_Rotation: {x: -90, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 0.2}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -4837,7 +4837,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 05ba60d18c657914abeb0617d8e929da, type: 2}
+  - {fileID: 2100000, guid: f4a066b76cd7a8648b746b7fc0da377c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4879,9 +4879,9 @@ ParticleSystemRenderer:
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
   m_VertexStreams: 00010304
-  m_Mesh: {fileID: -5950373342063127127, guid: 1b8bbb8ac2755d44e844fe497c831198, type: 3}
-  m_Mesh1: {fileID: -2676648658317925499, guid: 6555fcf0c509be246bf046edf889bf5f, type: 3}
-  m_Mesh2: {fileID: -4361798332195820217, guid: f4187718bddf1be4993e152aa0aaa83e, type: 3}
+  m_Mesh: {fileID: -5950373342063127127, guid: 2a0af5662f864f648aabf39d14cfee82, type: 3}
+  m_Mesh1: {fileID: -2676648658317925499, guid: 813543e89f89b4c43a07c06e5b2cd786, type: 3}
+  m_Mesh2: {fileID: -4361798332195820217, guid: aeaaa2239612f27409fe38fcbc3f98e6, type: 3}
   m_Mesh3: {fileID: 0}
   m_MeshWeighting: 1
   m_MeshWeighting1: 1
@@ -4939,6 +4939,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 89090bed6be74914d9c08e74c80c2931, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f4a066b76cd7a8648b746b7fc0da377c, type: 2}
     - target: {fileID: 919132149155446097, guid: 89090bed6be74914d9c08e74c80c2931, type: 3}
       propertyPath: m_Name
       value: weed_05

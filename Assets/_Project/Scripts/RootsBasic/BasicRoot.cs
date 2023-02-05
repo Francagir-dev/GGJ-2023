@@ -34,6 +34,7 @@ public class BasicRoot : MonoBehaviour, IRoot
     {
         transform.localScale = Vector3.zero;
         transform.Rotate(Vector3.up * Random.Range(0, 360));
+
         StartCoroutine(RootSpawn());
         IEnumerator RootSpawn()
         {
@@ -45,6 +46,7 @@ public class BasicRoot : MonoBehaviour, IRoot
                 yield return null;
             }
         }
+      
     }
 
     private void Update()
@@ -109,7 +111,8 @@ public class BasicRoot : MonoBehaviour, IRoot
         Destroy(weedsVisual.gameObject);
         Destroy(GetComponent<Collider>());
         GameManager._instance.currentRootsInField--;
-        GameManager._instance.rootsGrabbed += GameManager._instance.actualExpPoints;
+        GameManager._instance.rootsGrabbed++;
+        GameManager._instance.actualExpPoints += 2;
         leafParticle.Play();
         weedsVisual = null;
         Destroy(gameObject, 5);

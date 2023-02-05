@@ -46,14 +46,16 @@ public class GameManager : MonoBehaviour
     public UnityEvent<Upgrade> upgradedAdded;
 
 
-   public GameObject endGameScreen;
+    public GameObject endGameScreen;
 
 
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1f;
+        RootSpawner.stopSpawn = false;
         Application.targetFrameRate = 60;
         if (_instance != null && _instance != this) Destroy(this);
         else _instance = this;
@@ -128,7 +130,8 @@ public class GameManager : MonoBehaviour
         //if I have more exp than the requiered
         if (actualExpPoints > expPointsLevelUP)
         {
-            actualExpPoints = expPointsLevelUP - actualExpPoints; //save extra
+            actualExpPoints = Mathf.Abs(expPointsLevelUP - actualExpPoints); //save extra
+
             LevelUP();
         }
         else if (actualExpPoints == expPointsLevelUP)
@@ -143,7 +146,7 @@ public class GameManager : MonoBehaviour
         expProgressBar.maximum = (int)(expProgressBar.maximum * 1.5f);  //Add more exp need to lvl up
         expPointsLevelUP = expProgressBar.maximum;
         actualLevel++; //level Up
-      //  SelectUpgrades();
+                       //  SelectUpgrades();
 
 
     }
@@ -160,7 +163,7 @@ public class GameManager : MonoBehaviour
     {
         GameObject upgrade = Instantiate(prefabCard, Vector3.zero, Quaternion.identity);
         upgrade.GetComponent<UpgradeDisplay>().upgrade = upgradeToDisplay;
-        upgrade.GetComponent<Button>().onClick.AddListener(delegate () { AddUpgradeToList(upgradeToDisplay);});
+        upgrade.GetComponent<Button>().onClick.AddListener(delegate () { AddUpgradeToList(upgradeToDisplay); });
 
     }
 
@@ -217,19 +220,15 @@ public class GameManager : MonoBehaviour
         AddToHUD(upgrade);
     }
 
-    public void AddRoot()
-    {
-        currentRootsInField++;
-        if (currentRootsInField >= maxRootsInScreen)
-        {
-            GameOver();
-        }
-    }
+
 
     void GameOver()
     {
-        if (currentRootsInField>=maxRootsInScreen) {
+        if (currentRootsInField >= maxRootsInScreen)
+        {
+
             endGameScreen.SetActive(true);
+            RootSpawner.stopSpawn = true;
         }
     }
 

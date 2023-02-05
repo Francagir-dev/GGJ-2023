@@ -9,6 +9,7 @@ public class HandController : MonoBehaviour
     public Camera targetCamera;
     public Transform handVis;
     public float handDistance;
+    public float handGrabRange;
 
     public GameObject openHand;
     public GameObject closedHand;
@@ -58,7 +59,7 @@ public class HandController : MonoBehaviour
         if (pickedRoots.Count > 0)
         {
             //handVis.position = targetPosition;
-            float radius = 4; //radius of *black circle*
+            float radius = 1; //radius of *black circle*
             Vector3 centerPosition = grabPoint; //center of *black circle*
             float distance = Vector3.Distance(targetPosition, centerPosition); //distance from ~green object~ to *black circle*
             Debug.Log(distance);
@@ -95,7 +96,7 @@ public class HandController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Collider[] hits = Physics.OverlapSphere(hitInfo.point, 1 * handRadiousMult, rootsLayer);
+            Collider[] hits = Physics.OverlapSphere(hitInfo.point, handGrabRange, rootsLayer);
             pickedRoots = FilterRoots(hits);
 
             if (pickedRoots.Count > 0)

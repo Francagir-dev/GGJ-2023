@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndGame : MonoBehaviour
 {
-   [SerializeField] PauseMenu pauseGame;
-   [SerializeField] TextMeshProUGUI intPoints;
-   [SerializeField] TextMeshProUGUI duration;
+    [SerializeField] PauseMenu pauseGame;
+    [SerializeField] TextMeshProUGUI intPoints;
+    [SerializeField] TextMeshProUGUI duration;
 
 
     private void OnEnable()
@@ -17,5 +18,10 @@ public class EndGame : MonoBehaviour
         duration.text = GameManager._instance.textTimer;
     }
 
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
 }

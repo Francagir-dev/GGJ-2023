@@ -12,11 +12,11 @@ public class RootSpawner : MonoBehaviour
     public List<GameObject> roots;
 
     float spawnRate = 1;
-    public bool stopSpawn = false;
+    public static bool stopSpawn = false;
 
     private void Update()
     {
-        UpdateSpawnRate(Time.time);
+        UpdateSpawnRate(GameManager._instance.gameTimer);
         if (!stopSpawn)
         {
             SpawnRoot();
@@ -30,7 +30,7 @@ public class RootSpawner : MonoBehaviour
         if (spawnRate > Random.Range(0, 100))
         {
             Instantiate(roots[Random.Range(0, roots.Count)], spawnPoint, Quaternion.identity, parentSpawn.transform);
-            GameManager._instance.currentRootsInField--;
+            GameManager._instance.currentRootsInField++;
         }
     }
 
@@ -44,6 +44,6 @@ public class RootSpawner : MonoBehaviour
         return new Vector3(Random.Range(corner1.position.x, corner2.position.x), 
             Random.Range(corner1.position.y, corner2.position.y), 
             Random.Range(corner1.position.z, corner2.position.z)
-            );
+     );
     }
 }
