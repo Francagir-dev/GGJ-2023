@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     [Header("Timer")]
     public float gameTimer = 0.0f;
     [SerializeField] private TextMeshProUGUI timerText;
+    public string textTimer = "";
+
+
 
     [Header("Pause Menu")]
     public GameObject pauseMenu;
@@ -36,12 +39,18 @@ public class GameManager : MonoBehaviour
 
     public List<Upgrade> allUpgrades = new List<Upgrade>();
     public List<Upgrade> playerUpgrades = new List<Upgrade>();
-    private List<Upgrade> showUpgradesList = new List<Upgrade>();
+    public List<Upgrade> showUpgradesList = new List<Upgrade>();
 
     private Upgrade randomizedUpgrade;
 
     public UnityEvent<Upgrade> upgradedAdded;
 
+
+   public GameObject endGameScreen;
+
+
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +68,7 @@ public class GameManager : MonoBehaviour
     {
         Counter();
         CheckEXP();
+        GameOver();
     }
 
     #region Timer
@@ -86,8 +96,9 @@ public class GameManager : MonoBehaviour
         if (minutes > 9) minutesString = minutes.ToString();
         else minutesString = "0" + minutes.ToString();
 
+        textTimer = minutesString + ":" + secondsString;
         //Setting text
-        timerText.text = minutesString + ":" + secondsString;
+        timerText.text = textTimer;
     }
     #endregion
 
@@ -132,7 +143,7 @@ public class GameManager : MonoBehaviour
         expProgressBar.maximum = (int)(expProgressBar.maximum * 1.5f);  //Add more exp need to lvl up
         expPointsLevelUP = expProgressBar.maximum;
         actualLevel++; //level Up
-        SelectUpgrades();
+      //  SelectUpgrades();
 
 
     }
@@ -217,7 +228,9 @@ public class GameManager : MonoBehaviour
 
     void GameOver()
     {
-
+        if (currentRootsInField>=maxRootsInScreen) {
+            endGameScreen.SetActive(true);
+        }
     }
 
     void AddToHUD(Upgrade upgrade)
